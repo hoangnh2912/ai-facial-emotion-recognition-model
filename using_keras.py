@@ -1,13 +1,12 @@
-
 import cv2
 import numpy as np
 import matplotlib.pyplot
 from PIL import ImageFont, ImageDraw, Image
 from time import time
+from tensorflow.keras.models import load_model
 
 matplotlib.use('TkAgg')
 
-from tensorflow.keras.models import load_model
 
 class_name = ["bình thường", "vui", "ngạc nghiên", "buồn", "tức dận", "tởm", "sợ", "contempt"]
 
@@ -41,7 +40,7 @@ def run_pre(image_org):
                 x, y, w, h = crop_size[idx]
                 org = (x, y)
                 color = (0, 255, 0, 0)
-                font_size = int((w / width + h / height) * 100)
+                font_size = int((w / width + h / height) * 50)
                 img_pil = Image.fromarray(image_org)
                 draw = ImageDraw.Draw(img_pil)
                 font = ImageFont.truetype('OpenSans-Regular.ttf', font_size)
