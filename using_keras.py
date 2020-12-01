@@ -1,9 +1,13 @@
+
 import cv2
 import numpy as np
 import matplotlib.pyplot
+from PIL import ImageFont, ImageDraw, Image
+from time import time
 
 matplotlib.use('TkAgg')
-from keras.models import load_model
+
+from tensorflow.keras.models import load_model
 
 class_name = ["bình thường", "vui", "ngạc nghiên", "buồn", "tức dận", "tởm", "sợ", "contempt"]
 
@@ -35,21 +39,29 @@ def run_pre(image_org):
             if np.max(predict) >= 0.3:
                 name = class_name[np.argmax(predict)]
                 x, y, w, h = crop_size[idx]
-                # name += "\n"+ str(np.max(predict))
-                font = cv2.FONT_HERSHEY_SIMPLEX
                 org = (x, y)
-                fontScale = (w / width + h / height)*3
-                color = (0, 0, 255)
-                thickness = int(w / width + h / height) * 3
-                cv2.putText(image_org, name, org, font,
-                            fontScale, color, thickness, cv2.LINE_AA)
+                color = (0, 255, 0, 0)
+                font_size = int((w / width + h / height) * 100)
+                img_pil = Image.fromarray(image_org)
+                draw = ImageDraw.Draw(img_pil)
+                font = ImageFont.truetype('OpenSans-Regular.ttf', font_size)
+                draw.text(org, name, fill=color, font=font)
+                image_org = np.array(img_pil)
     return image_org
 
 
 cap = cv2.VideoCapture(0)
+start = time()
+font = cv2.FONT_HERSHEY_SIMPLEX
 while (1):
     ret, frame = cap.read()
-    cv2.imshow("cam", run_pre(frame))
+    processed = run_pre(frame)
+    now = time()
+    cv2.putText(processed, str(round(1 / (now - start), 1)) + "FPS", (50, 50), fontFace=font
+                , fontScale=1, color=(0, 255, 0), thickness=2)
+    start = now
+    cv2.imshow("cam", processed)
+    # cv2.imshow("cam", img)
     k = cv2.waitKey(33) & 0xFF
     if k == 27:
         break
