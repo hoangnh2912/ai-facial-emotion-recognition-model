@@ -55,6 +55,7 @@ async def _get_emotions(day:Optional[int]=None,month:Optional[int]=None,year:Opt
             "label":label,
         }
     if day is not None:
+        result = []
         f_ts = datetime(year,month,day).timestamp()
         t_ts = datetime(year,month,day,23,59,59).timestamp()
         list_emotion = get_customer().find({
@@ -63,11 +64,11 @@ async def _get_emotions(day:Optional[int]=None,month:Optional[int]=None,year:Opt
         list_emotion = list(list_emotion).copy()
         for i in range(len(list_emotion)):
             list_emotion[i]['_id'] = str(list_emotion[i]['_id'])
-        df = pd.DataFrame(list_emotion)
-        result = []
-        for id_emo,emo in enumerate(class_name):
-            if id_emo!=0:
-                result.append(df[df['emotion_id']==id_emo].__len__())
+        if list_emotion.__len__() >0:
+            df = pd.DataFrame(list_emotion)
+            for id_emo,emo in enumerate(class_name):
+                if id_emo!=0:
+                    result.append(df[df['emotion_id']==id_emo].__len__())
         return {
             'data':list(result)
         }
