@@ -45,7 +45,10 @@ async def _get_emotions(day:Optional[int]=None,month:Optional[int]=None,year:Opt
             if id_emo != 0:
                 data_count = np.zeros(total_days_in_month)
                 for d in range(total_days_in_month):
-                    data_count[d] = df[(df['day']==(d+1)) & (df['emotion_id']==id_emo)].__len__()
+                    try:
+                        data_count[d] = df[(df['day']==(d+1)) & (df['emotion_id']==id_emo)].__len__()
+                    except:
+                        data_count[d] = 0
                 result.append({
                     'data':list(data_count),
                     'label':emo
