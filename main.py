@@ -12,6 +12,7 @@ origins = [
     "http://localhost:3001",
     "http://localhost:8081",
     "http://128.199.72.145:8081",
+    "http://128.199.72.145:8082",
 ]
 class_name = ["bình thường", "Vui", "Ngạc nghiên", "Buồn", "Tức giận", "Kinh tởm", "Sợ hãi", "Khinh thường"]
 
